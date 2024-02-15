@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .card{
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                width: 20%;
+                border-radius: 5px;
+            }
+            .card:hover{
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }
+            img{
+                border-radius: 5px 5px 0 0;
+            }
+
+            .container{
+                padding: 2px 16px;
+            }
+            h4 {
+                font-weight: bold;
+            }
+        </style>
+        <script>
+            let ducks = [];
+      
+            async function getAll(){
+                let host = "http://localhost:8080";
+                //TODO
+                let request = {
+                method : "GET"
+                }
+                let response = await fetch(host + "/ducks", request);
+                return response.json();
+            }
+            async function start(){
+                ducks = await getAll();
+                console.log(ducks);
+                for(let duck of ducks){
+                        let id = document.createTextNode(duck.id);
+                        let div = document.createElement("div");
+                        div.setAttribute('class', 'card');
+                        let container = document.createElement("div");
+                        container.setAttribute("class", "container");
+
+                        let image = document.createElement("img");
+                        image.setAttribute("src", "http://localhost:8080/ducks/" + duck.id + "/image");
+                        image.setAttribute("alt", "Avatar");
+                        image.setAttribute("style", "width: 100%");
+
+                        let h = document.createElement("h4");
+                        let p = document.createElement("p");
+                        let type = document.createTextNode(duck.type);
+                        p.appendChild(type);
+
+                        div.appendChild(image);
+                        h.appendChild(id);
+                        container.appendChild(h);
+                        container.appendChild(p);
+                        div.appendChild(container);
+                        let body = document.getElementById("body");
+                        body.appendChild(div);
+                }
+            }
+            start();
+        </script>
+    </head>
+    <body id="body">
+        
+    </body>
+</html>
